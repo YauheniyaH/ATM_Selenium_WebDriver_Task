@@ -1,31 +1,29 @@
 package pageobject_model.page;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import java.io.IOException;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import java.time.Duration;
-
-public class CloudGoogleComputeEnginePage {
-
-    private WebDriver driver;
+public class CloudGoogleComputeEnginePage extends AbstractPage {
     private static final String COMPUTE_ENGINE_ULR="https://cloud.google.com/products/calculator?dl=CiQ1ZDg2ZjI0Yy1jMjNkLTQxZWYtOWFjNi0wZDFmMDcxMzdmN2YQCBokMUU1NEVBRjAtRUQ5QS00NUVFLUIzODItM0REQ0ZDNDAxQjYz";
-
+    private static final Logger logger = Logger.getLogger(CloudGoogleComputeEnginePage.class.getName());
+    private final FileHandler fileLog = new FileHandler("ComputeEngineLog.log");
     @FindBy(xpath = "//input[@id='i6']")
-    private WebElement numberOfInsatances;
+    private WebElement numberOfInstances;
     @FindBy(xpath="//*[contains(text(), 'Estimated cost')]/ancestor::div[1]//label")
     private WebElement monthRent;
-
     @FindBy (xpath="//button[@aria-label='Close']")
     private WebElement closeButtonOptional;
-    @FindBy(xpath = "//span[contains(text(),'Operating System / Software')]/ancestor::div[2]")
-    private WebElement osDropdown;
-    @FindBy (xpath="//span[contains(text(),'Free: Debian, CentOS, CoreOS, Ubuntu or BYOL (Bring Your Own License)')]/ancestor::li[1]")
-    private WebElement osDropdownOption;
+//    @FindBy(xpath = "//span[contains(text(),'Operating System / Software')]/ancestor::div[2]")
+//    private WebElement osDropdown;
+//    @FindBy (xpath="//span[contains(text(),'Free: Debian, CentOS, CoreOS, Ubuntu or BYOL (Bring Your Own License)')]/ancestor::li[1]")
+//    private WebElement osDropdownOption;
+//
+
     @FindBy(xpath = "//label[contains(text(), 'Regular')]/ancestor::div[1]")
     private WebElement modelRadioButton;
     @FindBy (xpath = "//span[contains(text(),'Machine type')]/ancestor::div[2]")
@@ -52,37 +50,42 @@ public class CloudGoogleComputeEnginePage {
     private WebElement region;
 
 
-    public CloudGoogleComputeEnginePage(WebDriver driver){
-        this.driver=driver;
-        PageFactory.initElements(new AjaxElementLocatorFactory(driver, 10), this);
+    public CloudGoogleComputeEnginePage(WebDriver driver) throws IOException {
+        super(driver);
     }
-
     public CloudGoogleComputeEnginePage openPage(){
         driver.get(COMPUTE_ENGINE_ULR);
-//        new WebDriverWait(driver, Duration.ofSeconds(10))
-//             .until(CustomConditions.jQueryAJAXsCompleted());
         return this;
     }
+    public CloudGoogleComputeEnginePage inputValues() throws IOException {
+        logger.addHandler(fileLog);
+        DropDownObject osDropdown = new DropDownObject(driver);
+        DropDownObject machineTypeDropdown=new DropDownObject(driver);
+        DropDownObject gpuModelDropdown=new DropDownObject(driver);
 
-    public CloudGoogleComputeEnginePage inpputValues(){
-        numberOfInsatances.clear();
-        numberOfInsatances.sendKeys("4");
-        if(closeButtonOptional!=null){
+        numberOfInstances.clear();
+        numberOfInstances.sendKeys("4");
+        try{
             closeButtonOptional.click();
+        }catch (Exception e){
+            logger.log(Level.INFO, "no close button");
+            System.out.println("no close button");
         }
-        osDropdown.click();
-        osDropdownOption.click();
+        osDropdown.expandDropdown("OS");
+        osDropdown.selectItemByValue("'Free: Debian, CentOS, CoreOS, Ubuntu or BYOL (Bring Your Own License)'");
+       // osDropdownOption.click();
         try {
             cookiesAcceptButton.click();
         }catch (Exception e){
-            System.out.println(" no cookies");
+            logger.log(Level.INFO, "no cookies");
+            System.out.println("no cookies");
         }
         modelRadioButton.click();
-        machineTypeDropdown.click();
-        machineTypeDropdownOption.click();
+        machineTypeDropdown.expandDropdown("machineType");
+        machineTypeDropdown.selectItemByValue("'n1-standard-8'");
         addGPURadioButton.click();
-        gpuModelDropdown.click();
-        gpuModelDropdownOption.click();
+       gpuModelDropdown.expandDropdown("gpuModel");
+        gpuModelDropdown.selectItemByValue("'NVIDIA TESLA P100'");
         gpuNumberDropdown.click();
         gpuNumberDropdownOption.click();
         committedTerm1YearButton.click();
@@ -90,22 +93,13 @@ public class CloudGoogleComputeEnginePage {
     }
 
     public String findMonthlyRent(){
-        long result;
-        //System.out.println(monthRent.getText());
         return monthRent.getText();
     }
 
     public boolean checkValues(){
-        boolean result =false;
-        if(modelRadioButton.getText().equals("Regular") &&
+        return modelRadioButton.getText().equals("Regular") &&
                 instanceType.getText().equals("n1-standard-8") &&
-                committedTerm1YearButton.getText().equals("1 year")
-        ){
-            result=true;
-        }
-
-
-        return result;
+                committedTerm1YearButton.getText().equals("1 year");
     }
 
 }

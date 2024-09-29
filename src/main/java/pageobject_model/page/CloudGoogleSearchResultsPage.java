@@ -9,26 +9,17 @@ import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 
 
 public class CloudGoogleSearchResultsPage {
-
     private WebDriver driver;
-    private String searchTerm;
-
-
-    @FindBy(xpath = "//a[contains(text(),'Google Cloud Pricing Calculator')]/ancestor::div[3]")
+    @FindBy(xpath = "//*[@data-ctorig='https://cloud.google.com/products/calculator']/ancestor::div[2]")
     private WebElement generalSearchResults;
-
-    public CloudGoogleSearchResultsPage (WebDriver driver, String searchTerm){
-        this.searchTerm= searchTerm;
+    public CloudGoogleSearchResultsPage (WebDriver driver){
         this.driver=driver;
         PageFactory.initElements(new AjaxElementLocatorFactory(driver, 10), this);
     }
-
     public WebElement findElementInSearchResult (){
         WebElement searchItem = generalSearchResults;
        generalSearchResults.click();
         return searchItem;
 
     }
-
-
 }

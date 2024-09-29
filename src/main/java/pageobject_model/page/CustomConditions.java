@@ -12,14 +12,13 @@ import java.time.Duration;
 
 public class CustomConditions {
     public static ExpectedCondition<Boolean> jQueryAJAXsCompleted(){
-        return new ExpectedCondition<Boolean>() {
+        return new ExpectedCondition<>() {
             @Override
             public Boolean apply(WebDriver driver) {
-                return (Boolean) ((JavascriptExecutor)driver).executeScript("return(window.jQuery!=null) && (JQUESRY.ACTIVE== = 0);");
+                return (Boolean) ((JavascriptExecutor) driver).executeScript("return(window.jQuery!=null) && (JQUERY.ACTIVE== = 0);");
             }
         };
     }
-
     public static WebElement waitForElementLocatedBy (WebDriver driver, By by){
         return new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.presenceOfElementLocated(by));
