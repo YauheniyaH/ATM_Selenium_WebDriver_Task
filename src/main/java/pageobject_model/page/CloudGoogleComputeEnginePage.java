@@ -18,12 +18,6 @@ public class CloudGoogleComputeEnginePage extends AbstractPage {
     private WebElement monthRent;
     @FindBy (xpath="//button[@aria-label='Close']")
     private WebElement closeButtonOptional;
-//    @FindBy(xpath = "//span[contains(text(),'Operating System / Software')]/ancestor::div[2]")
-//    private WebElement osDropdown;
-//    @FindBy (xpath="//span[contains(text(),'Free: Debian, CentOS, CoreOS, Ubuntu or BYOL (Bring Your Own License)')]/ancestor::li[1]")
-//    private WebElement osDropdownOption;
-//
-
     @FindBy(xpath = "//label[contains(text(), 'Regular')]/ancestor::div[1]")
     private WebElement modelRadioButton;
     @FindBy (xpath = "//span[contains(text(),'Machine type')]/ancestor::div[2]")
@@ -73,7 +67,6 @@ public class CloudGoogleComputeEnginePage extends AbstractPage {
         }
         osDropdown.expandDropdown("OS");
         osDropdown.selectItemByValue("'Free: Debian, CentOS, CoreOS, Ubuntu or BYOL (Bring Your Own License)'");
-       // osDropdownOption.click();
         try {
             cookiesAcceptButton.click();
         }catch (Exception e){
