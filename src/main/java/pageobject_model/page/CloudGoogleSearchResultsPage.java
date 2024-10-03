@@ -8,13 +8,19 @@ import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 
 
 
-public class CloudGoogleSearchResultsPage {
-    private WebDriver driver;
+public class CloudGoogleSearchResultsPage extends AbstractPage{///  add extension from AbstractPage
+
     @FindBy(xpath = "//*[@data-ctorig='https://cloud.google.com/products/calculator']/ancestor::div[2]")
     private WebElement generalSearchResults;
+
+    @Override
+    protected AbstractPage openPage() {
+        //method is not need for Search result page
+        return null;
+    }
+
     public CloudGoogleSearchResultsPage (WebDriver driver){
-        this.driver=driver;
-        PageFactory.initElements(new AjaxElementLocatorFactory(driver, 10), this);
+        super(driver);
     }
     public WebElement findElementInSearchResult (){
         WebElement searchItem = generalSearchResults;
