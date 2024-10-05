@@ -1,16 +1,18 @@
 package pageobject_model.page;
 
 
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.apache.commons.io.FileUtils;
+
 
 public class CloudGoogleComputeEnginePage extends AbstractPage {
     private static final String COMPUTE_ENGINE_ULR = "https://cloud.google.com/products/calculator?dl=CiQ1ZDg2ZjI0Yy1jMjNkLTQxZWYtOWFjNi0wZDFmMDcxMzdmN2YQCBokMUU1NEVBRjAtRUQ5QS00NUVFLUIzODItM0REQ0ZDNDAxQjYz";
@@ -48,9 +50,13 @@ public class CloudGoogleComputeEnginePage extends AbstractPage {
     private WebElement selectedProductTitle;
     @FindBy(xpath = "//input[@type='range' and @max='48']")
     private WebElement sliderNumberOfCPU;
-   private DropDownObject osDropdown = new DropDownObject(driver);
-   private DropDownObject machineTypeDropdown = new DropDownObject(driver);
-   private DropDownObject gpuModelDropdown = new DropDownObject(driver);
+    @FindBy(xpath = "//input[@type='range' and @max='48']/ancestor::div[1]//span[contains(text(),'vCPUs')]")
+    public WebElement labelNumberOfGPUs;
+    @FindBy(xpath = "//div[contains(text(), 'Estimated cost')]")
+    public WebElement labelEstimatedCost;
+    private DropDownObject osDropdown = new DropDownObject(driver);
+    private DropDownObject machineTypeDropdown = new DropDownObject(driver);
+    private DropDownObject gpuModelDropdown = new DropDownObject(driver);
 
 
     public CloudGoogleComputeEnginePage(WebDriver driver) throws IOException {
@@ -71,9 +77,9 @@ public class CloudGoogleComputeEnginePage extends AbstractPage {
         numberOfInstances.clear();
         numberOfInstances.sendKeys("4");
         //need to hide pop-ups which prevent continue of test
-        try{
+        try {
             closeButtonOptional.click();
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.log(Level.INFO, "no close button");
         }
 
@@ -81,7 +87,7 @@ public class CloudGoogleComputeEnginePage extends AbstractPage {
         osDropdown.selectItemByValue("'Free: Debian, CentOS, CoreOS, Ubuntu or BYOL (Bring Your Own License)'");
         try {
             cookiesAcceptButton.click();
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.log(Level.INFO, "no cookies");
         }
 
@@ -101,27 +107,60 @@ public class CloudGoogleComputeEnginePage extends AbstractPage {
         return monthRent.getText();
     }
 
-
-    public boolean checkValues(WebElement element, String expectedValue){
-        return element.getText().equals(expectedValue);
+    public void inputInstanceName(String instanceName) {
+        Actions actions = new Actions(driver);
+        //add waiter, optional
+        actions.moveToElement(instanceNameTextbox).click();
+        actions.sendKeys(instanceNameTextbox, instanceName).sendKeys(Keys.ENTER).perform();
     }
 
-    public String inputInstanceName() {
-
-        Actions actions = new Actions(driver);
-        actions.moveToElement(instanceNameTextbox).click();
-        actions.sendKeys(instanceNameTextbox, "test instance").sendKeys(Keys.ENTER).perform();
+    public String getTexBoxInstanceName (){
         return instanceNameTextbox.getText();
     }
 
-    public void moveNumberOfCPUScrollBar (int shiftValue){
+    public boolean checkRadioButtonValue ( String value){
+        return modelRadioButton.getText().equals(value);
+    }
+
+    public boolean checkInstanceTypeValue (String value){
+        return instanceType.getText().equals(value);
+    }
+
+    public boolean checkCommittedTermValue(String value){
+        return committedTerm1YearButton.getText().equals(value);
+    }
+
+    public void moveNumberOfCPUScrollBar(int shiftValue) {
         Actions actions = new Actions(driver);
         cookiesAcceptButton.click();
         closeButtonOptional.click();
+        actions.moveToElement(sliderNumberOfCPU).clickAndHold().moveByOffset(shiftValue, 0).release().perform();
+    }
 
-         actions.moveToElement(sliderNumberOfCPU).clickAndHold().moveByOffset(shiftValue,0).release().perform();
+    public void highlightElement(WebDriver driver, WebElement element) {
+        String bg = element.getCssValue("backgroundColor");
+        JavascriptExecutor js = ((JavascriptExecutor) driver);
+        js.executeScript("arguments[0].style.backgroundColor = '" + "yellow" + "'", element);
+        makeScreenshot();
+        js.executeScript("arguments[0].style.backgroundColor = '" + bg + "'", element);
 
     }
+
+    public void makeScreenshot() {
+        try {
+            File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+            FileUtils.copyFileToDirectory(screenshot, new File("src/test/test_output/screenshots"));
+          //  logger.htmlOutput("Taken screenshots <a href='screenshots/" + screenshot.getName() + "'>" + screenshot.getName() + "</a>");
+        } catch (Exception e) {
+          //  logger.error(e.getMessage());
+        }
+    }
+
+    public void scrollToBottomOfPage (){
+        JavascriptExecutor js =(JavascriptExecutor) driver;
+        js.executeScript("window.scrollBy(0,document.body.scrollHeight)");
+    }
+
 
 
 }

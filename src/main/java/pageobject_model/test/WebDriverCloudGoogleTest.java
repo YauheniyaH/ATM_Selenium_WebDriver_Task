@@ -1,16 +1,14 @@
 package pageobject_model.test;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+
 import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pageobject_model.page.CloudGoogleComputeEnginePage;
-
 
 import java.io.IOException;
 
@@ -27,7 +25,8 @@ public class WebDriverCloudGoogleTest {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--block-third-party-cookies");
         driver = new ChromeDriver(options.addArguments("--disable-search-engine-choice-screen"));
-       computeEnginePage= new CloudGoogleComputeEnginePage(driver);
+        // find parameter about clean cache
+        computeEnginePage = new CloudGoogleComputeEnginePage(driver);
         computeEnginePage.openPage();
     }
 
@@ -43,27 +42,29 @@ public class WebDriverCloudGoogleTest {
     @Test(description = "Check Input Values Correctness")
     public void calculatorValuesCheck() {
         computeEnginePage.inputValues();
-        WebElement modelRadioButton= driver.findElement(By.xpath("//label[contains(text(), 'Regular')]/ancestor::div[1]"));
-        assertTrue(computeEnginePage.checkValues(modelRadioButton,"Regular"));
-      WebElement instanceType=driver.findElement(By.xpath("//div[contains(text(),'n1-standard-8')]"));
-      assertTrue(computeEnginePage.checkValues(instanceType,"n1-standard-8"));
+        assertTrue(computeEnginePage.checkRadioButtonValue("Regular"));
+        assertTrue(computeEnginePage.checkInstanceTypeValue("n1-standard-8"));
+        assertTrue(computeEnginePage.checkCommittedTermValue("1 year"));
     }
 
-
     @Test(description = "Click and hold Action test for Amount of memory scrollbar; check that set value by scrollbar equals value in text-box")
-    public void numberOfCPUSliderCheck()  {
-        WebElement labelNumberOfGPUs= driver.findElement(By.xpath("//input[@type='range' and @max='48']/ancestor::div[1]//span[contains(text(),'vCPUs')]"));
-
+    public void numberOfCPUSliderCheck() {
         computeEnginePage.moveNumberOfCPUScrollBar(50);
-        AssertJUnit.assertEquals("16 vCPUs", labelNumberOfGPUs.getText());
-
-
+        computeEnginePage.highlightElement(driver, computeEnginePage.labelNumberOfGPUs);
+        AssertJUnit.assertEquals("16 vCPUs", computeEnginePage.labelNumberOfGPUs.getText());
     }
 
     @Test(description = "Instance name input check using Actions")
     public void inputTextBoxCheck() {
-        String s = computeEnginePage.inputInstanceName();
-        assertEquals("test instance", s);
+        String inputValue = "test instance";
+        computeEnginePage.inputInstanceName(inputValue);
+        assertEquals(inputValue, computeEnginePage.getTexBoxInstanceName());
+    }
+
+    @Test(description = "Check that Estimated cost stay visible if scroll to the bottom of the page")
+    public void labelEstimatedCostVisibilityCheck()  {
+        computeEnginePage.scrollToBottomOfPage();
+        assertTrue(computeEnginePage.labelEstimatedCost.isDisplayed());
     }
 
     @AfterMethod(alwaysRun = true)
