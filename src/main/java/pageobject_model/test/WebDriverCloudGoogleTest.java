@@ -33,7 +33,16 @@ public class WebDriverCloudGoogleTest {
 
     @Test(description = "Monthly rate for input parameters has correct value")
     public void calculateMonthlyRentForParameters() throws InterruptedException {
-        computeEnginePage.inputValues();
+        computeEnginePage.inputNumberOfInstances("4");
+        computeEnginePage.optionalPopUpClose();
+        computeEnginePage.selectDropdownValue("OS","'Free: Debian, CentOS, CoreOS, Ubuntu or BYOL (Bring Your Own License)'");
+        computeEnginePage.cookiesPopUpClose();
+        computeEnginePage.modelRadioButton.click();
+        computeEnginePage.selectDropdownValue("machineType","'n1-standard-8'");
+        computeEnginePage.addGPURadioButton.click();
+        computeEnginePage.selectDropdownValue("gpuModel","'NVIDIA TESLA P100'");
+        computeEnginePage.inputGPUNumber("1");
+        computeEnginePage.committedTerm1YearButton.click();
         Thread.sleep(5000);
         String calculatedMonthRent = computeEnginePage.getMonthlyRent();
         assertEquals("$3,384.50", calculatedMonthRent);
@@ -41,14 +50,24 @@ public class WebDriverCloudGoogleTest {
 
     @Test(description = "Check Input Values Correctness")
     public void calculatorValuesCheck() {
-        computeEnginePage.inputValues();
+        computeEnginePage.inputNumberOfInstances("4");
+        computeEnginePage.optionalPopUpClose();
+        computeEnginePage.selectDropdownValue("OS","'Free: Debian, CentOS, CoreOS, Ubuntu or BYOL (Bring Your Own License)'");
+        computeEnginePage.cookiesPopUpClose();
+        computeEnginePage.modelRadioButton.click();
+        computeEnginePage.selectDropdownValue("machineType","'n1-standard-8'");
+        computeEnginePage.addGPURadioButton.click();
+        computeEnginePage.selectDropdownValue("gpuModel","'NVIDIA TESLA P100'");
+        computeEnginePage.inputGPUNumber("1");
+        computeEnginePage.committedTerm1YearButton.click();
+
         assertTrue(computeEnginePage.checkRadioButtonValue("Regular"));
         assertTrue(computeEnginePage.checkInstanceTypeValue("n1-standard-8"));
         assertTrue(computeEnginePage.checkCommittedTermValue("1 year"));
     }
 
     @Test(description = "Click and hold Action test for Amount of memory scrollbar; check that set value by scrollbar equals value in text-box")
-    public void numberOfCPUSliderCheck() {
+    public void numberOfCPUSliderCheck() throws IOException {
         computeEnginePage.moveNumberOfCPUScrollBar(50);
         computeEnginePage.highlightElement(driver, computeEnginePage.labelNumberOfGPUs);
         AssertJUnit.assertEquals("16 vCPUs", computeEnginePage.labelNumberOfGPUs.getText());
@@ -62,7 +81,7 @@ public class WebDriverCloudGoogleTest {
     }
 
     @Test(description = "Check that Estimated cost stay visible if scroll to the bottom of the page")
-    public void labelEstimatedCostVisibilityCheck()  {
+    public void labelEstimatedCostVisibilityCheck() {
         computeEnginePage.scrollToBottomOfPage();
         assertTrue(computeEnginePage.labelEstimatedCost.isDisplayed());
     }
