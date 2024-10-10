@@ -35,14 +35,19 @@ public class WebDriverCloudGoogleTest {
     public void calculateMonthlyRentForParameters() throws InterruptedException {
         computeEnginePage.inputNumberOfInstances("4");
         computeEnginePage.optionalPopUpClose();
+
         computeEnginePage.selectDropdownValue("OS","'Free: Debian, CentOS, CoreOS, Ubuntu or BYOL (Bring Your Own License)'");
         computeEnginePage.cookiesPopUpClose();
+
         computeEnginePage.modelRadioButton.click();
-        computeEnginePage.selectDropdownValue("machineType","'n1-standard-8'");
+        computeEnginePage.selectDropdownValue("machineType","'n1-standard-8'"); //dropdownName move to enum
+
         computeEnginePage.addGPURadioButton.click();
         computeEnginePage.selectDropdownValue("gpuModel","'NVIDIA TESLA P100'");
         computeEnginePage.inputGPUNumber("1");
+
         computeEnginePage.committedTerm1YearButton.click();
+
         Thread.sleep(5000);
         String calculatedMonthRent = computeEnginePage.getMonthlyRent();
         assertEquals("$3,384.50", calculatedMonthRent);
@@ -52,18 +57,22 @@ public class WebDriverCloudGoogleTest {
     public void calculatorValuesCheck() {
         computeEnginePage.inputNumberOfInstances("4");
         computeEnginePage.optionalPopUpClose();
+
         computeEnginePage.selectDropdownValue("OS","'Free: Debian, CentOS, CoreOS, Ubuntu or BYOL (Bring Your Own License)'");
         computeEnginePage.cookiesPopUpClose();
+
         computeEnginePage.modelRadioButton.click();
         computeEnginePage.selectDropdownValue("machineType","'n1-standard-8'");
+
         computeEnginePage.addGPURadioButton.click();
         computeEnginePage.selectDropdownValue("gpuModel","'NVIDIA TESLA P100'");
         computeEnginePage.inputGPUNumber("1");
+
         computeEnginePage.committedTerm1YearButton.click();
 
-        assertTrue(computeEnginePage.checkRadioButtonValue("Regular"));
-        assertTrue(computeEnginePage.checkInstanceTypeValue("n1-standard-8"));
-        assertTrue(computeEnginePage.checkCommittedTermValue("1 year"));
+        assertTrue(computeEnginePage.checkControlValue(computeEnginePage.modelRadioButton,"Regular"));
+        assertTrue(computeEnginePage.checkControlValue(computeEnginePage.instanceType, "n1-standard-8"));
+        assertTrue(computeEnginePage.checkControlValue(computeEnginePage.committedTerm1YearButton,"1 year"));
     }
 
     @Test(description = "Click and hold Action test for Amount of memory scrollbar; check that set value by scrollbar equals value in text-box")
