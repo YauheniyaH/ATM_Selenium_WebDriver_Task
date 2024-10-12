@@ -29,22 +29,19 @@ public class WebDriverSeleniumGridTest {
     @BeforeMethod(alwaysRun = true)
     public void browserSetup() throws IOException, URISyntaxException {
         DesiredCapabilities caps = new DesiredCapabilities();
-        caps.setPlatform(Platform.IOS);
+        caps.setPlatform(Platform.MAC);
         caps.setBrowserName("chrome");
         caps.setAcceptInsecureCerts(true);
-
-        ChromeOptions options = new ChromeOptions();
         URL url = new URI(GRID_HOST).toURL();
-        //  WebDriver driver = new RemoteWebDriver(url, caps);
-        driver = new RemoteWebDriver(url, options); // why works with options, but not working with caps??
+        driver = new RemoteWebDriver(url, caps);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.manage().window().maximize();
         computeEnginePage = new CloudGoogleComputeEnginePage(driver);
-        computeEnginePage.openPage();
     }
 
     @Test
     public void seleniumGridTest() {
+        computeEnginePage.openPage();
         assertEquals("Compute Engine", computeEnginePage.pageTitle.getText());
     }
 

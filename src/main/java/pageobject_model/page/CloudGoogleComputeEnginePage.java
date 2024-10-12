@@ -1,6 +1,5 @@
 package pageobject_model.page;
 
-
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
@@ -14,7 +13,6 @@ import org.apache.commons.io.FileUtils;
 import static java.lang.String.format;
 import static java.util.logging.Level.INFO;
 import static org.openqa.selenium.OutputType.FILE;
-
 
 public class CloudGoogleComputeEnginePage extends AbstractPage {
     private static final String COMPUTE_ENGINE_ULR = "https://cloud.google.com/products/calculator?dl=CiQ1ZDg2ZjI0Yy1jMjNkLTQxZWYtOWFjNi0wZDFmMDcxMzdmN2YQCBokMUU1NEVBRjAtRUQ5QS00NUVFLUIzODItM0REQ0ZDNDAxQjYz";
@@ -84,7 +82,7 @@ public class CloudGoogleComputeEnginePage extends AbstractPage {
         numberOfInstances.sendKeys(number);
     }
 
-    public void selectDropdownValue(String dropdownName, String value) {
+    public void selectDropdownValue(DropDownObject.DropDownName dropdownName, String value) {
         DropDownObject dropdown = new DropDownObject(driver);
         dropdown.expandDropdown(dropdownName);
         dropdown.selectItemByValue(value);
@@ -92,7 +90,8 @@ public class CloudGoogleComputeEnginePage extends AbstractPage {
 
     public void optionalPopUpClose() {
         try {
-            closeButtonOptional.click();
+            JavascriptExecutor executor = (JavascriptExecutor)driver;
+            executor.executeScript("arguments[0].click();",closeButtonOptional); // or closeButtonOptional.click();
         } catch (Exception e) {
             logger.log(INFO, "no close button");
         }
