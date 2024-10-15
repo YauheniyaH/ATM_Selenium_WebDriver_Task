@@ -1,17 +1,17 @@
 package pageobject_model.page;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
 
 import static java.lang.String.format;
-import static java.util.logging.Level.INFO;
 import static org.openqa.selenium.OutputType.FILE;
 
 public class CloudGoogleComputeEnginePage extends AbstractPage {
@@ -21,7 +21,7 @@ public class CloudGoogleComputeEnginePage extends AbstractPage {
 
     private static final int Y_OFFSET = 0;
 
-    private static final Logger logger = Logger.getLogger(CloudGoogleComputeEnginePage.class.getName());
+    private static final Logger logger = LogManager.getRootLogger();
 
     @FindBy(xpath = "//input[@id='i6']")
     private WebElement numberOfInstances;
@@ -93,7 +93,7 @@ public class CloudGoogleComputeEnginePage extends AbstractPage {
             JavascriptExecutor executor = (JavascriptExecutor)driver;
             executor.executeScript("arguments[0].click();",closeButtonOptional); // or closeButtonOptional.click();
         } catch (Exception e) {
-            logger.log(INFO, "no close button");
+            logger.info( "no close button");
         }
     }
 
@@ -107,7 +107,7 @@ public class CloudGoogleComputeEnginePage extends AbstractPage {
         try {
             cookiesAcceptButton.click();
         } catch (Exception e) {
-            logger.log(INFO, "no cookies");
+            logger.info( "no cookies");
         }
     }
 

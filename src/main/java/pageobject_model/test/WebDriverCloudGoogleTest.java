@@ -1,63 +1,42 @@
 package pageobject_model.test;
 
-import org.openqa.selenium.Platform;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.AssertJUnit;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import pageobject_model.model.ComputeEngineEntity;
 import pageobject_model.page.CloudGoogleComputeEnginePage;
 import pageobject_model.page.DropDownObject;
+import pageobject_model.service.ComputeEngineEntityCreator;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 
 import static org.junit.Assert.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
-
-
-public class WebDriverCloudGoogleTest {
-    private static final String GRID_HOST = "http://localhost:4444/wd/hub";
-    private WebDriver driver;
+public class WebDriverCloudGoogleTest extends CommonConditions {
     private CloudGoogleComputeEnginePage computeEnginePage;
 
     @BeforeMethod(alwaysRun = true)
-    public void browserSetup() throws URISyntaxException, MalformedURLException {
-        DesiredCapabilities caps = new DesiredCapabilities();
-        caps.setPlatform(Platform.MAC);
-        caps.setBrowserName("chrome");
-        caps.setAcceptInsecureCerts(true);
-        URL url = new URI(GRID_HOST).toURL();
-        driver = new RemoteWebDriver(url, caps);
-        // find parameter about clean cache
+    public void browserSetup()  {
         computeEnginePage = new CloudGoogleComputeEnginePage(driver);
         computeEnginePage.openPage();
     }
 
-
     @Test(description = "Monthly rate for input parameters has correct value")
     public void calculateMonthlyRentForParameters() throws InterruptedException {
-        computeEnginePage.inputNumberOfInstances("4");
+        ComputeEngineEntity testEntity = ComputeEngineEntityCreator.withParametersFromProperty();
+        computeEnginePage.inputNumberOfInstances(testEntity.getNumberOfInstances());
         computeEnginePage.optionalPopUpClose();
 
-        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.OS,"'Free: Debian, CentOS, CoreOS, Ubuntu or BYOL (Bring Your Own License)'");
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.OS,testEntity.getOs());
         computeEnginePage.cookiesPopUpClose();
 
         computeEnginePage.modelRadioButton.click();
-        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.MACHINE_TYPE,"'n1-standard-8'");
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.MACHINE_TYPE,testEntity.getMachineType());
 
         computeEnginePage.addGPURadioButton.click();
-        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.GPU_MODEL,"'NVIDIA TESLA P100'");
-        computeEnginePage.inputGPUNumber("1");
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.GPU_MODEL,testEntity.getGpuModel());
+        computeEnginePage.inputGPUNumber(testEntity.getGpuNumber());
 
         computeEnginePage.committedTerm1YearButton.click();
 
@@ -68,18 +47,19 @@ public class WebDriverCloudGoogleTest {
 
     @Test(description = "Check Input Values Correctness")
     public void calculatorValuesCheck() {
-        computeEnginePage.inputNumberOfInstances("4");
+        ComputeEngineEntity testEntity = ComputeEngineEntityCreator.withParametersFromProperty();
+        computeEnginePage.inputNumberOfInstances(testEntity.getNumberOfInstances());
         computeEnginePage.optionalPopUpClose();
 
-        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.OS,"'Free: Debian, CentOS, CoreOS, Ubuntu or BYOL (Bring Your Own License)'");
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.OS,testEntity.getOs());
         computeEnginePage.cookiesPopUpClose();
 
         computeEnginePage.modelRadioButton.click();
-        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.MACHINE_TYPE,"'n1-standard-8'");
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.MACHINE_TYPE,testEntity.getMachineType());
 
         computeEnginePage.addGPURadioButton.click();
-        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.GPU_MODEL,"'NVIDIA TESLA P100'");
-        computeEnginePage.inputGPUNumber("1");
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.GPU_MODEL,testEntity.getGpuModel());
+        computeEnginePage.inputGPUNumber(testEntity.getGpuNumber());
 
         computeEnginePage.committedTerm1YearButton.click();
 
@@ -108,9 +88,4 @@ public class WebDriverCloudGoogleTest {
         assertTrue(computeEnginePage.labelEstimatedCost.isDisplayed());
     }
 
-    @AfterMethod(alwaysRun = true)
-    public void browserTearDown() {
-        driver.quit();
-        driver = null;
-    }
 }
