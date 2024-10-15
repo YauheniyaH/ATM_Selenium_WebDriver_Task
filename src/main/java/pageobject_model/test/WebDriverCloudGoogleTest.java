@@ -1,48 +1,45 @@
 package pageobject_model.test;
 
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-
 import org.testng.AssertJUnit;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import pageobject_model.model.ComputeEngineEntity;
 import pageobject_model.page.CloudGoogleComputeEnginePage;
+import pageobject_model.page.DropDownObject;
+import pageobject_model.service.ComputeEngineEntityCreator;
 
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
-
-public class WebDriverCloudGoogleTest {
-    private WebDriver driver;
+public class WebDriverCloudGoogleTest extends CommonConditions {
     private CloudGoogleComputeEnginePage computeEnginePage;
 
     @BeforeMethod(alwaysRun = true)
-    public void browserSetup() throws IOException {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--block-third-party-cookies");
-        driver = new ChromeDriver(options.addArguments("--disable-search-engine-choice-screen"));
-        // find parameter about clean cache
+    public void browserSetup()  {
         computeEnginePage = new CloudGoogleComputeEnginePage(driver);
         computeEnginePage.openPage();
     }
 
-
     @Test(description = "Monthly rate for input parameters has correct value")
     public void calculateMonthlyRentForParameters() throws InterruptedException {
-        computeEnginePage.inputNumberOfInstances("4");
+        ComputeEngineEntity testEntity = ComputeEngineEntityCreator.withParametersFromProperty();
+        computeEnginePage.inputNumberOfInstances(testEntity.getNumberOfInstances());
         computeEnginePage.optionalPopUpClose();
-        computeEnginePage.selectDropdownValue("OS","'Free: Debian, CentOS, CoreOS, Ubuntu or BYOL (Bring Your Own License)'");
+
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.OS,testEntity.getOs());
         computeEnginePage.cookiesPopUpClose();
+
         computeEnginePage.modelRadioButton.click();
-        computeEnginePage.selectDropdownValue("machineType","'n1-standard-8'");
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.MACHINE_TYPE,testEntity.getMachineType());
+
         computeEnginePage.addGPURadioButton.click();
-        computeEnginePage.selectDropdownValue("gpuModel","'NVIDIA TESLA P100'");
-        computeEnginePage.inputGPUNumber("1");
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.GPU_MODEL,testEntity.getGpuModel());
+        computeEnginePage.inputGPUNumber(testEntity.getGpuNumber());
+
         computeEnginePage.committedTerm1YearButton.click();
+
         Thread.sleep(5000);
         String calculatedMonthRent = computeEnginePage.getMonthlyRent();
         assertEquals("$3,384.50", calculatedMonthRent);
@@ -50,20 +47,25 @@ public class WebDriverCloudGoogleTest {
 
     @Test(description = "Check Input Values Correctness")
     public void calculatorValuesCheck() {
-        computeEnginePage.inputNumberOfInstances("4");
+        ComputeEngineEntity testEntity = ComputeEngineEntityCreator.withParametersFromProperty();
+        computeEnginePage.inputNumberOfInstances(testEntity.getNumberOfInstances());
         computeEnginePage.optionalPopUpClose();
-        computeEnginePage.selectDropdownValue("OS","'Free: Debian, CentOS, CoreOS, Ubuntu or BYOL (Bring Your Own License)'");
+
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.OS,testEntity.getOs());
         computeEnginePage.cookiesPopUpClose();
+
         computeEnginePage.modelRadioButton.click();
-        computeEnginePage.selectDropdownValue("machineType","'n1-standard-8'");
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.MACHINE_TYPE,testEntity.getMachineType());
+
         computeEnginePage.addGPURadioButton.click();
-        computeEnginePage.selectDropdownValue("gpuModel","'NVIDIA TESLA P100'");
-        computeEnginePage.inputGPUNumber("1");
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.GPU_MODEL,testEntity.getGpuModel());
+        computeEnginePage.inputGPUNumber(testEntity.getGpuNumber());
+
         computeEnginePage.committedTerm1YearButton.click();
 
-        assertTrue(computeEnginePage.checkRadioButtonValue("Regular"));
-        assertTrue(computeEnginePage.checkInstanceTypeValue("n1-standard-8"));
-        assertTrue(computeEnginePage.checkCommittedTermValue("1 year"));
+        assertTrue(computeEnginePage.checkControlValue(computeEnginePage.modelRadioButton,"Regular"));
+        assertTrue(computeEnginePage.checkControlValue(computeEnginePage.instanceType, "n1-standard-8"));
+        assertTrue(computeEnginePage.checkControlValue(computeEnginePage.committedTerm1YearButton,"1 year"));
     }
 
     @Test(description = "Click and hold Action test for Amount of memory scrollbar; check that set value by scrollbar equals value in text-box")
@@ -86,9 +88,4 @@ public class WebDriverCloudGoogleTest {
         assertTrue(computeEnginePage.labelEstimatedCost.isDisplayed());
     }
 
-    @AfterMethod(alwaysRun = true)
-    public void browserTearDown() {
-        driver.quit();
-        driver = null;
-    }
 }
