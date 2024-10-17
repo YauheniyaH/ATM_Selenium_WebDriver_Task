@@ -1,0 +1,2 @@
+number_of_instances;os;machine_type;gpu_model;gpu_number
+4;'Free: Debian, CentOS, CoreOS, Ubuntu or BYOL (Bring Your Own License)';'n1-standard-8';'NVIDIA TESLA P100';1
