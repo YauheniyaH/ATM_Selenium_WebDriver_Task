@@ -55,11 +55,11 @@ function toggleAllBoxes() {
 <body>
 <h2 align='center'>Compute Engine tests</h2><table border='1' align="center">
 <tr>
-<td>Tests passed/Failed/Skipped:</td><td>0/1/0</td>
+<td>Tests passed/Failed/Skipped:</td><td>4/1/0</td>
 </tr><tr>
-<td>Started on:</td><td>Wed Oct 16 00:41:46 CEST 2024</td>
+<td>Started on:</td><td>Thu Oct 17 11:00:44 CEST 2024</td>
 </tr>
-<tr><td>Total time:</td><td>15 seconds (15151 ms)</td>
+<tr><td>Total time:</td><td>38 seconds (38977 ms)</td>
 </tr><tr>
 <td>Included groups:</td><td></td>
 </tr><tr>
@@ -76,13 +76,13 @@ function toggleAllBoxes() {
 <td><b>Instance</b></td>
 </tr>
 <tr>
-<td title='pageobject_model.test.NewWebDriverCloudGoogleTest.inputTextBoxCheck()'><b>inputTextBoxCheck</b><br>Test class: pageobject_model.test.NewWebDriverCloudGoogleTest<br>Test method: Instance name input check using Actions</td>
+<td title='pageobject_model.test.WebDriverCloudGoogleTest.inputTextBoxCheck()'><b>inputTextBoxCheck</b><br>Test class: pageobject_model.test.WebDriverCloudGoogleTest<br>Test method: Instance name input check using Actions</td>
 <td><div><pre>org.openqa.selenium.NoSuchElementException: Timed out after 10 seconds. Unable to locate the element
 	at org.openqa.selenium.support.pagefactory.AjaxElementLocator.findElement(AjaxElementLocator.java:90)
 	at org.openqa.selenium.support.pagefactory.internal.LocatingElementHandler.invoke(LocatingElementHandler.java:38)
-	at jdk.proxy2/jdk.proxy2.$Proxy24.getText(Unknown Source)
-	at pageobject_model.page.CloudGoogleComputeEnginePage.getTexBoxInstanceName(CloudGoogleComputeEnginePage.java:125)
-	at pageobject_model.test.NewWebDriverCloudGoogleTest.inputTextBoxCheck(NewWebDriverCloudGoogleTest.java:27)
+	at jdk.proxy2/jdk.proxy2.$Proxy26.getText(Unknown Source)
+	at pageobject_model.page.CloudGoogleComputeEnginePage.getTexBoxInstanceName(CloudGoogleComputeEnginePage.java:113)
+	at pageobject_model.test.WebDriverCloudGoogleTest.inputTextBoxCheck(WebDriverCloudGoogleTest.java:80)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
 Caused by: org.openqa.selenium.NoSuchElementException: no such element: Unable to locate element: {&quot;method&quot;:&quot;xpath&quot;,&quot;selector&quot;:&quot;//textarea[@aria-label=&apos;Rename Instances&apos;]&quot;}
   (Session info: chrome=129.0.6668.101)
@@ -90,9 +90,9 @@ For documentation on this error, please visit: https://www.selenium.dev/document
 Build info: version: &apos;4.22.0&apos;, revision: &apos;c5f3146703*&apos;
 System info: os.name: &apos;Mac OS X&apos;, os.arch: &apos;aarch64&apos;, os.version: &apos;14.6.1&apos;, java.version: &apos;22.0.1&apos;
 Driver info: org.openqa.selenium.remote.RemoteWebDriver
-Command: [5f4bcc760b1470e6c2e1334a78bdee4e, findElement {using=xpath, value=//textarea[@aria-label=&apos;Rename Instances&apos;]}]
-Capabilities {acceptInsecureCerts: true, browserName: chrome, browserVersion: 129.0.6668.101, chrome: {chromedriverVersion: 129.0.6668.100 (cf58cba358d..., userDataDir: /var/folders/ny/q6np4jfs2yl...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:62064}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: mac, proxy: Proxy(), se:bidiEnabled: false, se:cdp: ws://192.168.1.130:4444/ses..., se:cdpVersion: 129.0.6668.101, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
-Session ID: 5f4bcc760b1470e6c2e1334a78bdee4e
+Command: [e207d21f7e4c7e0a8981a02c136d82aa, findElement {value=//textarea[@aria-label=&apos;Rename Instances&apos;], using=xpath}]
+Capabilities {acceptInsecureCerts: true, browserName: chrome, browserVersion: 129.0.6668.101, chrome: {chromedriverVersion: 129.0.6668.100 (cf58cba358d..., userDataDir: /var/folders/ny/q6np4jfs2yl...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:64934}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: mac, proxy: Proxy(), se:bidiEnabled: false, se:cdp: ws://192.168.1.130:4444/ses..., se:cdpVersion: 129.0.6668.101, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Session ID: e207d21f7e4c7e0a8981a02c136d82aa
 	at org.openqa.selenium.remote.ErrorCodec.decode(ErrorCodec.java:167)
 	at org.openqa.selenium.remote.codec.w3c.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:138)
 	at org.openqa.selenium.remote.codec.w3c.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:50)
@@ -109,13 +109,13 @@ Session ID: 5f4bcc760b1470e6c2e1334a78bdee4e
 	at org.openqa.selenium.support.ui.SlowLoadableComponent.get(SlowLoadableComponent.java:79)
 	at org.openqa.selenium.support.pagefactory.AjaxElementLocator.findElement(AjaxElementLocator.java:86)
 	... 34 more
-... Removed 32 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace271944754", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
-<div class='stack-trace' id='stack-trace271944754'><pre>org.openqa.selenium.NoSuchElementException: Timed out after 10 seconds. Unable to locate the element
+... Removed 32 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace1831478624", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace1831478624'><pre>org.openqa.selenium.NoSuchElementException: Timed out after 10 seconds. Unable to locate the element
 	at org.openqa.selenium.support.pagefactory.AjaxElementLocator.findElement(AjaxElementLocator.java:90)
 	at org.openqa.selenium.support.pagefactory.internal.LocatingElementHandler.invoke(LocatingElementHandler.java:38)
-	at jdk.proxy2/jdk.proxy2.$Proxy24.getText(Unknown Source)
-	at pageobject_model.page.CloudGoogleComputeEnginePage.getTexBoxInstanceName(CloudGoogleComputeEnginePage.java:125)
-	at pageobject_model.test.NewWebDriverCloudGoogleTest.inputTextBoxCheck(NewWebDriverCloudGoogleTest.java:27)
+	at jdk.proxy2/jdk.proxy2.$Proxy26.getText(Unknown Source)
+	at pageobject_model.page.CloudGoogleComputeEnginePage.getTexBoxInstanceName(CloudGoogleComputeEnginePage.java:113)
+	at pageobject_model.test.WebDriverCloudGoogleTest.inputTextBoxCheck(WebDriverCloudGoogleTest.java:80)
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
 	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
@@ -152,9 +152,9 @@ For documentation on this error, please visit: https://www.selenium.dev/document
 Build info: version: &apos;4.22.0&apos;, revision: &apos;c5f3146703*&apos;
 System info: os.name: &apos;Mac OS X&apos;, os.arch: &apos;aarch64&apos;, os.version: &apos;14.6.1&apos;, java.version: &apos;22.0.1&apos;
 Driver info: org.openqa.selenium.remote.RemoteWebDriver
-Command: [5f4bcc760b1470e6c2e1334a78bdee4e, findElement {using=xpath, value=//textarea[@aria-label=&apos;Rename Instances&apos;]}]
-Capabilities {acceptInsecureCerts: true, browserName: chrome, browserVersion: 129.0.6668.101, chrome: {chromedriverVersion: 129.0.6668.100 (cf58cba358d..., userDataDir: /var/folders/ny/q6np4jfs2yl...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:62064}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: mac, proxy: Proxy(), se:bidiEnabled: false, se:cdp: ws://192.168.1.130:4444/ses..., se:cdpVersion: 129.0.6668.101, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
-Session ID: 5f4bcc760b1470e6c2e1334a78bdee4e
+Command: [e207d21f7e4c7e0a8981a02c136d82aa, findElement {value=//textarea[@aria-label=&apos;Rename Instances&apos;], using=xpath}]
+Capabilities {acceptInsecureCerts: true, browserName: chrome, browserVersion: 129.0.6668.101, chrome: {chromedriverVersion: 129.0.6668.100 (cf58cba358d..., userDataDir: /var/folders/ny/q6np4jfs2yl...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:64934}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: mac, proxy: Proxy(), se:bidiEnabled: false, se:cdp: ws://192.168.1.130:4444/ses..., se:cdpVersion: 129.0.6668.101, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Session ID: e207d21f7e4c7e0a8981a02c136d82aa
 	at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)
 	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502)
 	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:486)
@@ -176,7 +176,36 @@ Session ID: 5f4bcc760b1470e6c2e1334a78bdee4e
 	... 34 more
 </pre></div></td>
 <td>10</td>
-<td>pageobject_model.test.NewWebDriverCloudGoogleTest@7adda9cc</td></tr>
+<td>pageobject_model.test.WebDriverCloudGoogleTest@78e117e3</td></tr>
+</table><p>
+<table width='100%' border='1' class='invocation-passed'>
+<tr><td colspan='4' align='center'><b>PASSED TESTS</b></td></tr>
+<tr><td><b>Test method</b></td>
+<td><b>Attribute(s)</b></td>
+<td width="30%"><b>Exception</b></td>
+<td width="10%"><b>Time (seconds)</b></td>
+<td><b>Instance</b></td>
+</tr>
+<tr>
+<td title='pageobject_model.test.WebDriverCloudGoogleTest.calculatorValuesCheck()'><b>calculatorValuesCheck</b><br>Test class: pageobject_model.test.WebDriverCloudGoogleTest<br>Test method: Check Input Values Correctness</td>
+<td></td>
+<td>2</td>
+<td>pageobject_model.test.WebDriverCloudGoogleTest@78e117e3</td></tr>
+<tr>
+<td title='pageobject_model.test.WebDriverCloudGoogleTest.numberOfCPUSliderCheck()'><b>numberOfCPUSliderCheck</b><br>Test class: pageobject_model.test.WebDriverCloudGoogleTest<br>Test method: Click and hold Action test for Amount of memory scrollbar; check that set value by scrollbar equals value in text-box</td>
+<td></td>
+<td>0</td>
+<td>pageobject_model.test.WebDriverCloudGoogleTest@78e117e3</td></tr>
+<tr>
+<td title='pageobject_model.test.WebDriverCloudGoogleTest.calculateMonthlyRentForParameters()'><b>calculateMonthlyRentForParameters</b><br>Test class: pageobject_model.test.WebDriverCloudGoogleTest<br>Test method: Monthly rate for input parameters has correct value</td>
+<td></td>
+<td>7</td>
+<td>pageobject_model.test.WebDriverCloudGoogleTest@78e117e3</td></tr>
+<tr>
+<td title='pageobject_model.test.WebDriverCloudGoogleTest.labelEstimatedCostVisibilityCheck()'><b>labelEstimatedCostVisibilityCheck</b><br>Test class: pageobject_model.test.WebDriverCloudGoogleTest<br>Test method: Check that Estimated cost stay visible if scroll to the bottom of the page</td>
+<td></td>
+<td>0</td>
+<td>pageobject_model.test.WebDriverCloudGoogleTest@78e117e3</td></tr>
 </table><p>
 </body>
 </html>

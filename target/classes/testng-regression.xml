@@ -3,7 +3,7 @@
 <suite name="Regression" verbose="1" >
     <test name="Compute Engine tests"   >
         <classes>
-            <class name="pageobject_model.test.NewWebDriverCloudGoogleTest" />
+            <class name="pageobject_model.test.WebDriverCloudGoogleTest" />
         </classes>
     </test>
 </suite>

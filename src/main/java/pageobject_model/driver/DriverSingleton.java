@@ -3,7 +3,6 @@ package pageobject_model.driver;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -18,11 +17,11 @@ public class DriverSingleton {
     private static WebDriver driver;
     private static final String GRID_HOST = "http://localhost:4444/wd/hub";
 
-
-    private DriverSingleton(){}
+    private DriverSingleton() {
+    }
 
     public static WebDriver getDriver() throws URISyntaxException, MalformedURLException {
-        if (null == driver){
+        if (null == driver) {
             switch (System.getProperty("browser")) {
                 case "firefox" -> {
                     WebDriverManager.firefoxdriver().setup();
@@ -47,7 +46,7 @@ public class DriverSingleton {
         return driver;
     }
 
-    public static void closeDriver(){
+    public static void closeDriver() {
         driver.quit();
         driver = null;
     }

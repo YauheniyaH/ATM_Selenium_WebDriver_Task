@@ -10,21 +10,22 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
+import pageobject_model.model.ComputeEngineEntity;
+import pageobject_model.service.TestDataReader;
 
 import static java.lang.String.format;
 import static org.openqa.selenium.OutputType.FILE;
+import static pageobject_model.service.TestDataReader.COMPUTE_ENGINE_ULR;
+
 
 public class CloudGoogleComputeEnginePage extends AbstractPage {
-    private static final String COMPUTE_ENGINE_ULR = "https://cloud.google.com/products/calculator?dl=CiQ1ZDg2ZjI0Yy1jMjNkLTQxZWYtOWFjNi0wZDFmMDcxMzdmN2YQCBokMUU1NEVBRjAtRUQ5QS00NUVFLUIzODItM0REQ0ZDNDAxQjYz";
-
     private static final String HIGHLIGHT_SCRIPT_TEMPLATE = "arguments[0].style.backgroundColor = '" + "%s" + "'";
 
     private static final int Y_OFFSET = 0;
 
     private static final Logger logger = LogManager.getRootLogger();
 
-    @FindBy(xpath = "//input[@id='i6']")
-    private WebElement numberOfInstances;
+    private ComputeEngineEntity computeEngineEntity;
 
     @FindBy(xpath = "//*[contains(text(), 'Estimated cost')]/ancestor::div[1]//label")
     private WebElement monthRent;
@@ -32,17 +33,11 @@ public class CloudGoogleComputeEnginePage extends AbstractPage {
     @FindBy(xpath = "//button[@aria-label='Close']")
     private WebElement closeButtonOptional;
 
-    @FindBy(xpath = "//span[contains(text(), 'Number of GPUs')]/ancestor::div[1]")
-    private WebElement gpuNumberDropdown;
-
-    @FindBy(xpath = "//li[@data-value='1']")
-    private WebElement gpuNumberDropdownOption;
-
     @FindBy(xpath = "//button[@class='glue-cookie-notification-bar__accept']")
     private WebElement cookiesAcceptButton;
 
     @FindBy(xpath = "//div[contains(text(),'n1-standard-8')]")
-    public WebElement instanceType;
+    public WebElement machineTypeSelected;
 
     @FindBy(xpath = "//textarea[@aria-label='Rename Instances']")
     private WebElement instanceNameTextBox;
@@ -50,17 +45,8 @@ public class CloudGoogleComputeEnginePage extends AbstractPage {
     @FindBy(xpath = "//input[@type='range' and @max='48']")
     private WebElement sliderNumberOfCPU;
 
-    @FindBy(xpath = "//label[contains(text(), 'Regular')]/ancestor::div[1]")
-    public WebElement modelRadioButton;
-
-    @FindBy(xpath = "//button[@aria-label='Add GPUs']")
-    public WebElement addGPURadioButton;
-
     @FindBy(xpath = "//input[@type='range' and @max='48']/ancestor::div[1]//span[contains(text(),'vCPUs')]")
     public WebElement labelNumberOfGPUs;
-
-    @FindBy(xpath = "//label[contains(text(), '1 year')]/ancestor::div[1]")
-    public WebElement committedTerm1YearButton;
 
     @FindBy(xpath = "//div[contains(text(), 'Estimated cost')]")
     public WebElement labelEstimatedCost;
@@ -70,48 +56,47 @@ public class CloudGoogleComputeEnginePage extends AbstractPage {
 
     public CloudGoogleComputeEnginePage(WebDriver driver) {
         super(driver);
+        computeEngineEntity = new ComputeEngineEntity(driver);
     }
 
     public CloudGoogleComputeEnginePage openPage() {
-        driver.get(COMPUTE_ENGINE_ULR);
+        driver.get(TestDataReader.getTestData(COMPUTE_ENGINE_ULR));
+        logger.info("ComputeEnginePage is open");
         return this;
     }
 
-    public void inputNumberOfInstances(String number) {
-        numberOfInstances.clear();
-        numberOfInstances.sendKeys(number);
+    public ComputeEngineEntity getComputeEngineEntity() {
+        return computeEngineEntity;
     }
 
     public void selectDropdownValue(DropDownObject.DropDownName dropdownName, String value) {
         DropDownObject dropdown = new DropDownObject(driver);
         dropdown.expandDropdown(dropdownName);
         dropdown.selectItemByValue(value);
+        logger.info(String.format("Input dropdown value for %s", dropdownName));
     }
 
     public void optionalPopUpClose() {
         try {
-            JavascriptExecutor executor = (JavascriptExecutor)driver;
-            executor.executeScript("arguments[0].click();",closeButtonOptional); // or closeButtonOptional.click();
+            JavascriptExecutor executor = (JavascriptExecutor) driver;
+            executor.executeScript("arguments[0].click();", closeButtonOptional);
+            logger.info("Sharing link pop-up was closed");
         } catch (Exception e) {
-            logger.info( "no close button");
+            logger.debug("no sharing link pop-up displayed");
         }
-    }
-
-    public void inputGPUNumber(String value) {
-        String template = "//li[@data-value='%s']";
-        gpuNumberDropdown.click();
-        gpuNumberDropdown.findElement(By.xpath(format(template, value))).click();
     }
 
     public void cookiesPopUpClose() {
         try {
             cookiesAcceptButton.click();
+            logger.info("Cookies pop-up was closed");
         } catch (Exception e) {
-            logger.info( "no cookies");
+            logger.debug("no cookies pop-up displayed");
         }
     }
 
     public String getMonthlyRent() {
+        logger.info("Read month rent value");
         return monthRent.getText();
     }
 
@@ -119,6 +104,7 @@ public class CloudGoogleComputeEnginePage extends AbstractPage {
         Actions actions = new Actions(driver);
         actions.moveToElement(instanceNameTextBox).click();
         actions.sendKeys(instanceNameTextBox, instanceName).sendKeys(Keys.ENTER).perform();
+        logger.debug("Instance name was updated");
     }
 
     public String getTexBoxInstanceName() {
@@ -134,6 +120,7 @@ public class CloudGoogleComputeEnginePage extends AbstractPage {
         cookiesAcceptButton.click();
         closeButtonOptional.click();
         actions.moveToElement(sliderNumberOfCPU).clickAndHold().moveByOffset(shiftValue, Y_OFFSET).release().perform();
+        logger.debug(String.format("Number of CPUs scroll bar was moved by %s to the right", shiftValue));
     }
 
     public void highlightElement(WebDriver driver, WebElement element) throws IOException {
