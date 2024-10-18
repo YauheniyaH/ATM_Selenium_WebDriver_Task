@@ -1,30 +1,43 @@
 package pageobject_model.test;
 
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pageobject_model.page.CloudGoogleComputeEnginePage;
+import pageobject_model.page.DropDownObject;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 import static org.junit.Assert.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
 
+
 public class WebDriverCloudGoogleTest {
+    private static final String GRID_HOST = "http://localhost:4444/wd/hub";
     private WebDriver driver;
     private CloudGoogleComputeEnginePage computeEnginePage;
 
     @BeforeMethod(alwaysRun = true)
-    public void browserSetup() throws IOException {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--block-third-party-cookies");
-        driver = new ChromeDriver(options.addArguments("--disable-search-engine-choice-screen"));
+    public void browserSetup() throws URISyntaxException, MalformedURLException {
+        DesiredCapabilities caps = new DesiredCapabilities();
+        caps.setPlatform(Platform.MAC);
+        caps.setBrowserName("chrome");
+        caps.setAcceptInsecureCerts(true);
+        URL url = new URI(GRID_HOST).toURL();
+        driver = new RemoteWebDriver(url, caps);
         // find parameter about clean cache
         computeEnginePage = new CloudGoogleComputeEnginePage(driver);
         computeEnginePage.openPage();
@@ -35,14 +48,19 @@ public class WebDriverCloudGoogleTest {
     public void calculateMonthlyRentForParameters() throws InterruptedException {
         computeEnginePage.inputNumberOfInstances("4");
         computeEnginePage.optionalPopUpClose();
-        computeEnginePage.selectDropdownValue("OS","'Free: Debian, CentOS, CoreOS, Ubuntu or BYOL (Bring Your Own License)'");
+
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.OS,"'Free: Debian, CentOS, CoreOS, Ubuntu or BYOL (Bring Your Own License)'");
         computeEnginePage.cookiesPopUpClose();
+
         computeEnginePage.modelRadioButton.click();
-        computeEnginePage.selectDropdownValue("machineType","'n1-standard-8'");
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.MACHINE_TYPE,"'n1-standard-8'");
+
         computeEnginePage.addGPURadioButton.click();
-        computeEnginePage.selectDropdownValue("gpuModel","'NVIDIA TESLA P100'");
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.GPU_MODEL,"'NVIDIA TESLA P100'");
         computeEnginePage.inputGPUNumber("1");
+
         computeEnginePage.committedTerm1YearButton.click();
+
         Thread.sleep(5000);
         String calculatedMonthRent = computeEnginePage.getMonthlyRent();
         assertEquals("$3,384.50", calculatedMonthRent);
@@ -52,18 +70,22 @@ public class WebDriverCloudGoogleTest {
     public void calculatorValuesCheck() {
         computeEnginePage.inputNumberOfInstances("4");
         computeEnginePage.optionalPopUpClose();
-        computeEnginePage.selectDropdownValue("OS","'Free: Debian, CentOS, CoreOS, Ubuntu or BYOL (Bring Your Own License)'");
+
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.OS,"'Free: Debian, CentOS, CoreOS, Ubuntu or BYOL (Bring Your Own License)'");
         computeEnginePage.cookiesPopUpClose();
+
         computeEnginePage.modelRadioButton.click();
-        computeEnginePage.selectDropdownValue("machineType","'n1-standard-8'");
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.MACHINE_TYPE,"'n1-standard-8'");
+
         computeEnginePage.addGPURadioButton.click();
-        computeEnginePage.selectDropdownValue("gpuModel","'NVIDIA TESLA P100'");
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.GPU_MODEL,"'NVIDIA TESLA P100'");
         computeEnginePage.inputGPUNumber("1");
+
         computeEnginePage.committedTerm1YearButton.click();
 
-        assertTrue(computeEnginePage.checkRadioButtonValue("Regular"));
-        assertTrue(computeEnginePage.checkInstanceTypeValue("n1-standard-8"));
-        assertTrue(computeEnginePage.checkCommittedTermValue("1 year"));
+        assertTrue(computeEnginePage.checkControlValue(computeEnginePage.modelRadioButton,"Regular"));
+        assertTrue(computeEnginePage.checkControlValue(computeEnginePage.instanceType, "n1-standard-8"));
+        assertTrue(computeEnginePage.checkControlValue(computeEnginePage.committedTerm1YearButton,"1 year"));
     }
 
     @Test(description = "Click and hold Action test for Amount of memory scrollbar; check that set value by scrollbar equals value in text-box")

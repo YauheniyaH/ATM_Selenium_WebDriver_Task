@@ -5,6 +5,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pageobject_model.page.CloudGoogleComputeEnginePage;
 
@@ -14,27 +16,38 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.Duration;
 
-import static org.testng.AssertJUnit.assertTrue;
+import static org.testng.AssertJUnit.assertEquals;
+
 
 public class WebDriverSeleniumGridTest {
+    private static final String GRID_HOST = "http://localhost:4444/wd/hub";
 
-    @Test
-    public void seleniumGridTest() throws URISyntaxException, IOException {
+    private WebDriver driver;
+
+    private CloudGoogleComputeEnginePage computeEnginePage;
+
+    @BeforeMethod(alwaysRun = true)
+    public void browserSetup() throws IOException, URISyntaxException {
         DesiredCapabilities caps = new DesiredCapabilities();
-        caps.setPlatform(Platform.IOS);
+        caps.setPlatform(Platform.MAC);
         caps.setBrowserName("chrome");
         caps.setAcceptInsecureCerts(true);
-        ChromeOptions options = new ChromeOptions();
-        String path = "http://localhost:4444/wd/hub";
-        URL url = new URI(path).toURL();
-//        WebDriver driver = new RemoteWebDriver(url, caps);
-        WebDriver driver = new RemoteWebDriver(url, options); // why works with options, but not working with caps??
+        URL url = new URI(GRID_HOST).toURL();
+        driver = new RemoteWebDriver(url, caps);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.manage().window().maximize();
-        CloudGoogleComputeEnginePage computeEnginePage = new CloudGoogleComputeEnginePage(driver);
+        computeEnginePage = new CloudGoogleComputeEnginePage(driver);
+    }
+
+    @Test
+    public void seleniumGridTest() {
         computeEnginePage.openPage();
+        assertEquals("Compute Engine", computeEnginePage.pageTitle.getText());
+    }
 
-
+    @AfterMethod(alwaysRun = true)
+    public void browserTearDown() {
         driver.quit();
+        driver = null;
     }
 }
