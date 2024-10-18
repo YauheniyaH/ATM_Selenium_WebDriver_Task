@@ -1,69 +1,71 @@
 package pageobject_model.test;
 
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-
 import org.testng.AssertJUnit;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pageobject_model.page.CloudGoogleComputeEnginePage;
+import pageobject_model.page.DropDownObject;
 
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
-
-public class WebDriverCloudGoogleTest {
-    private WebDriver driver;
+public class WebDriverCloudGoogleTest extends CommonConditions {
     private CloudGoogleComputeEnginePage computeEnginePage;
 
     @BeforeMethod(alwaysRun = true)
-    public void browserSetup() throws IOException {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--block-third-party-cookies");
-        driver = new ChromeDriver(options.addArguments("--disable-search-engine-choice-screen"));
-        // find parameter about clean cache
+    public void browserSetup()  {
         computeEnginePage = new CloudGoogleComputeEnginePage(driver);
         computeEnginePage.openPage();
     }
 
-
-    @Test(description = "Monthly rate for input parameters has correct value")
-    public void calculateMonthlyRentForParameters() throws InterruptedException {
-        computeEnginePage.inputNumberOfInstances("4");
+    @Test(description = "Monthly rate for input parameters has correct value",
+            dataProvider = "computeEngineTestValues",
+            dataProviderClass = pageobject_model.service.TestDataProvider.class )
+    public void calculateMonthlyRentForParameters(String numberOfInstances, String os, String machineType, String gpuModel, String gpuNumber) throws InterruptedException {
+        computeEnginePage.getComputeEngineEntity().setNumberOfInstances(numberOfInstances);
         computeEnginePage.optionalPopUpClose();
-        computeEnginePage.selectDropdownValue("OS","'Free: Debian, CentOS, CoreOS, Ubuntu or BYOL (Bring Your Own License)'");
+
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.OS,os);
         computeEnginePage.cookiesPopUpClose();
-        computeEnginePage.modelRadioButton.click();
-        computeEnginePage.selectDropdownValue("machineType","'n1-standard-8'");
-        computeEnginePage.addGPURadioButton.click();
-        computeEnginePage.selectDropdownValue("gpuModel","'NVIDIA TESLA P100'");
-        computeEnginePage.inputGPUNumber("1");
-        computeEnginePage.committedTerm1YearButton.click();
+
+        computeEnginePage.getComputeEngineEntity().selectModelRadioButton();
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.MACHINE_TYPE,machineType);
+
+        computeEnginePage.getComputeEngineEntity().switchAddGPURadioButton();
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.GPU_MODEL, gpuModel);
+        computeEnginePage.getComputeEngineEntity().setGpuNumber(gpuNumber);
+
+        computeEnginePage.getComputeEngineEntity().selectCommittedTerm1Year();
+
         Thread.sleep(5000);
         String calculatedMonthRent = computeEnginePage.getMonthlyRent();
         assertEquals("$3,384.50", calculatedMonthRent);
     }
 
-    @Test(description = "Check Input Values Correctness")
-    public void calculatorValuesCheck() {
-        computeEnginePage.inputNumberOfInstances("4");
+    @Test(description = "Check Input Values Correctness",
+            dataProvider = "computeEngineTestValues",
+            dataProviderClass = pageobject_model.service.TestDataProvider.class )
+    public void calculatorValuesCheck(String numberOfInstances, String os, String machineType, String gpuModel, String gpuNumber) {
+        computeEnginePage.getComputeEngineEntity().setNumberOfInstances(numberOfInstances);
         computeEnginePage.optionalPopUpClose();
-        computeEnginePage.selectDropdownValue("OS","'Free: Debian, CentOS, CoreOS, Ubuntu or BYOL (Bring Your Own License)'");
-        computeEnginePage.cookiesPopUpClose();
-        computeEnginePage.modelRadioButton.click();
-        computeEnginePage.selectDropdownValue("machineType","'n1-standard-8'");
-        computeEnginePage.addGPURadioButton.click();
-        computeEnginePage.selectDropdownValue("gpuModel","'NVIDIA TESLA P100'");
-        computeEnginePage.inputGPUNumber("1");
-        computeEnginePage.committedTerm1YearButton.click();
 
-        assertTrue(computeEnginePage.checkRadioButtonValue("Regular"));
-        assertTrue(computeEnginePage.checkInstanceTypeValue("n1-standard-8"));
-        assertTrue(computeEnginePage.checkCommittedTermValue("1 year"));
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.OS,os);
+        computeEnginePage.cookiesPopUpClose();
+
+        computeEnginePage.getComputeEngineEntity().selectModelRadioButton();
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.MACHINE_TYPE,machineType);
+
+        computeEnginePage.getComputeEngineEntity().switchAddGPURadioButton();
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.GPU_MODEL,gpuModel);
+        computeEnginePage.getComputeEngineEntity().setGpuNumber(gpuNumber);
+
+        computeEnginePage.getComputeEngineEntity().selectCommittedTerm1Year();
+
+        assertTrue(computeEnginePage.checkControlValue(computeEnginePage.getComputeEngineEntity().getModelRadioButton(),"Regular"));
+        assertTrue(computeEnginePage.checkControlValue(computeEnginePage.machineTypeSelected, "n1-standard-8"));
+        assertTrue(computeEnginePage.checkControlValue(computeEnginePage.getComputeEngineEntity().getCommittedTerm1YearButton(),"1 year"));
     }
 
     @Test(description = "Click and hold Action test for Amount of memory scrollbar; check that set value by scrollbar equals value in text-box")
@@ -86,9 +88,4 @@ public class WebDriverCloudGoogleTest {
         assertTrue(computeEnginePage.labelEstimatedCost.isDisplayed());
     }
 
-    @AfterMethod(alwaysRun = true)
-    public void browserTearDown() {
-        driver.quit();
-        driver = null;
-    }
 }
