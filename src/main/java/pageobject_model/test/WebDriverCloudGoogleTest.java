@@ -5,13 +5,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pageobject_model.page.CloudGoogleComputeEnginePage;
 import pageobject_model.page.DropDownObject;
-import pageobject_model.service.TestDataReader;
 
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
-import static pageobject_model.service.TestDataReader.*;
 
 public class WebDriverCloudGoogleTest extends CommonConditions {
     private CloudGoogleComputeEnginePage computeEnginePage;
@@ -22,20 +20,22 @@ public class WebDriverCloudGoogleTest extends CommonConditions {
         computeEnginePage.openPage();
     }
 
-    @Test(description = "Monthly rate for input parameters has correct value")
-    public void calculateMonthlyRentForParameters() throws InterruptedException {
-        computeEnginePage.getComputeEngineEntity().setNumberOfInstances(TestDataReader.getTestData(TESTDATA_NUMBER_OF_INSTANCES));
+    @Test(description = "Monthly rate for input parameters has correct value",
+            dataProvider = "computeEngineTestValues",
+            dataProviderClass = pageobject_model.service.TestDataProvider.class )
+    public void calculateMonthlyRentForParameters(String numberOfInstances, String os, String machineType, String gpuModel, String gpuNumber) throws InterruptedException {
+        computeEnginePage.getComputeEngineEntity().setNumberOfInstances(numberOfInstances);
         computeEnginePage.optionalPopUpClose();
 
-        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.OS,TestDataReader.getTestData(TESTDATA_OS));
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.OS,os);
         computeEnginePage.cookiesPopUpClose();
 
         computeEnginePage.getComputeEngineEntity().selectModelRadioButton();
-        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.MACHINE_TYPE,TestDataReader.getTestData(TESTDATA_MACHINE_TYPE));
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.MACHINE_TYPE,machineType);
 
         computeEnginePage.getComputeEngineEntity().switchAddGPURadioButton();
-        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.GPU_MODEL,TestDataReader.getTestData(TESTDATA_GPU_MODEL));
-        computeEnginePage.getComputeEngineEntity().setGpuNumber(TestDataReader.getTestData(TESTDATA_GPU_NUMBER));
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.GPU_MODEL, gpuModel);
+        computeEnginePage.getComputeEngineEntity().setGpuNumber(gpuNumber);
 
         computeEnginePage.getComputeEngineEntity().selectCommittedTerm1Year();
 
@@ -44,20 +44,22 @@ public class WebDriverCloudGoogleTest extends CommonConditions {
         assertEquals("$3,384.50", calculatedMonthRent);
     }
 
-    @Test(description = "Check Input Values Correctness")
-    public void calculatorValuesCheck() {
-        computeEnginePage.getComputeEngineEntity().setNumberOfInstances(TestDataReader.getTestData(TESTDATA_NUMBER_OF_INSTANCES));
+    @Test(description = "Check Input Values Correctness",
+            dataProvider = "computeEngineTestValues",
+            dataProviderClass = pageobject_model.service.TestDataProvider.class )
+    public void calculatorValuesCheck(String numberOfInstances, String os, String machineType, String gpuModel, String gpuNumber) {
+        computeEnginePage.getComputeEngineEntity().setNumberOfInstances(numberOfInstances);
         computeEnginePage.optionalPopUpClose();
 
-        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.OS,TestDataReader.getTestData(TESTDATA_OS));
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.OS,os);
         computeEnginePage.cookiesPopUpClose();
 
         computeEnginePage.getComputeEngineEntity().selectModelRadioButton();
-        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.MACHINE_TYPE,TestDataReader.getTestData(TESTDATA_MACHINE_TYPE));
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.MACHINE_TYPE,machineType);
 
         computeEnginePage.getComputeEngineEntity().switchAddGPURadioButton();
-        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.GPU_MODEL,TestDataReader.getTestData(TESTDATA_GPU_MODEL));
-        computeEnginePage.getComputeEngineEntity().setGpuNumber(TestDataReader.getTestData(TESTDATA_GPU_NUMBER));
+        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.GPU_MODEL,gpuModel);
+        computeEnginePage.getComputeEngineEntity().setGpuNumber(gpuNumber);
 
         computeEnginePage.getComputeEngineEntity().selectCommittedTerm1Year();
 

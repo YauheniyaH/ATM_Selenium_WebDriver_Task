@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class TestDataProvider {
+    private static final String DELIMITER = ";";
 
     @DataProvider(name = "computeEngineTestValues")
     public Iterator<Object[]> getTestData() {
@@ -22,7 +23,7 @@ public class TestDataProvider {
         List<Object []> testCases = new ArrayList<>();
         BufferedReader br = null;
         String line ;
-        final String DELIMITER = ";";
+
         try {
             br = new BufferedReader(new FileReader("src/main/resources/test-data/testdata.csv"));
             while ((line = br.readLine()) != null) {
