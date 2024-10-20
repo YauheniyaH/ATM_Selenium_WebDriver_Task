@@ -4,9 +4,12 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import pageobject_model.service.TestDataReader;
+
+import static pageobject_model.service.TestDataReader.HOMEPAGE_URL;
 
 public class CloudGoogleHomePage extends AbstractPage {
-    private static final String HOMEPAGE_URL = "https://cloud.google.com/";
+
     @FindBy(xpath = "//span[contains(text(),'')]/ancestor::div[2]")
     private WebElement searchButton;
     @FindBy(xpath = "//input[@aria-label='Search']")
@@ -17,7 +20,7 @@ public class CloudGoogleHomePage extends AbstractPage {
     }
 
     public CloudGoogleHomePage openPage() {
-        driver.get(HOMEPAGE_URL);
+        driver.get(TestDataReader.getTestData(HOMEPAGE_URL));
         return this;
     }
 

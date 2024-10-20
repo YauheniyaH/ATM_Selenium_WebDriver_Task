@@ -4,7 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class CloudGoogleSearchResultsPage extends AbstractPage{///  add extension from AbstractPage
+public class CloudGoogleSearchResultsPage extends AbstractPage{
 
     @FindBy(xpath = "//*[@data-ctorig='https://cloud.google.com/products/calculator']/ancestor::div[2]")
     private WebElement generalSearchResults;
