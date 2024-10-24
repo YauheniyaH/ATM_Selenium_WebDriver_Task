@@ -21,18 +21,14 @@ public class ComputeEngineEntity {
     private WebElement gpuNumberDropdown;
 
     @FindBy(xpath = "//label[contains(text(), 'Regular')]/ancestor::div[1]")
-    private WebElement modelRadioButton;
-
-    @FindBy(xpath = "//button[@aria-label='Add GPUs']")
-    private WebElement addGPURadioButton;
+    private WebElement modelButton;
 
     @FindBy(xpath = "//label[contains(text(), '1 year')]/ancestor::div[1]")
     private WebElement committedTerm1YearButton;
 
-    public ComputeEngineEntity(WebDriver driver){
+    public ComputeEngineEntity(WebDriver driver) {
         // added because do not understand why PageFactory was not initialized in AbstractPage
         PageFactory.initElements(new AjaxElementLocatorFactory(driver, 10), this);
-
     }
 
     public String getGpuNumberValue() {
@@ -44,16 +40,16 @@ public class ComputeEngineEntity {
     }
 
     public WebElement getModelRadioButton() {
-        return modelRadioButton;
+        return modelButton;
     }
 
     public String getModelRadioButtonValue() {
-        return modelRadioButton.getText();
+        return modelButton.getText();
     }
 
     public void selectModelRadioButton() {
         logger.debug("Model was selected");
-        this.modelRadioButton.click();
+        this.modelButton.click();
     }
 
     public void setGpuNumber(String value) {
@@ -73,21 +69,18 @@ public class ComputeEngineEntity {
 
     public void setNumberOfInstances(String value) {
         numberOfInstances.clear();
-        numberOfInstances.sendKeys( value);
+        numberOfInstances.sendKeys(value);
         logger.debug("Number of instances was input into text-box");
-    }
-
-    public void switchAddGPURadioButton(){
-        addGPURadioButton.click();
-        logger.debug("Add GPUs option was enabled");
     }
 
     public WebElement getCommittedTerm1YearButton() {
         return committedTerm1YearButton;
     }
 
-    public void selectCommittedTerm1Year(){
+    public void selectCommittedTerm1Year() {
         committedTerm1YearButton.click();
         logger.debug("Committed term was set to 1 year");
     }
+
+
 }

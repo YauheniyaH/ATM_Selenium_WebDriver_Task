@@ -4,7 +4,8 @@ import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pageobject_model.page.CloudGoogleComputeEnginePage;
-import pageobject_model.page.DropDownObject;
+import pageobject_model.page.elements.DropDownElement;
+import pageobject_model.page.elements.RadioButtonElement;
 
 import java.io.IOException;
 
@@ -27,21 +28,21 @@ public class WebDriverCloudGoogleTest extends CommonConditions {
         computeEnginePage.getComputeEngineEntity().setNumberOfInstances(numberOfInstances);
         computeEnginePage.optionalPopUpClose();
 
-        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.OS,os);
+        computeEnginePage.selectDropdownValue(DropDownElement.DropDownName.OS,os);
         computeEnginePage.cookiesPopUpClose();
 
         computeEnginePage.getComputeEngineEntity().selectModelRadioButton();
-        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.MACHINE_TYPE,machineType);
+        computeEnginePage.selectDropdownValue(DropDownElement.DropDownName.MACHINE_TYPE,machineType);
 
-        computeEnginePage.getComputeEngineEntity().switchAddGPURadioButton();
-        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.GPU_MODEL, gpuModel);
+        computeEnginePage.enableRadioButton(RadioButtonElement.RadioButtonName.ADD_GPU);
+        computeEnginePage.selectDropdownValue(DropDownElement.DropDownName.GPU_MODEL, gpuModel);
         computeEnginePage.getComputeEngineEntity().setGpuNumber(gpuNumber);
 
         computeEnginePage.getComputeEngineEntity().selectCommittedTerm1Year();
 
         Thread.sleep(5000);
         String calculatedMonthRent = computeEnginePage.getMonthlyRent();
-        assertEquals("$3,384.50", calculatedMonthRent);
+        assertEquals("$3,384.50", calculatedMonthRent); //update dataProvider and add second line in csv
     }
 
     @Test(description = "Check Input Values Correctness",
@@ -51,14 +52,14 @@ public class WebDriverCloudGoogleTest extends CommonConditions {
         computeEnginePage.getComputeEngineEntity().setNumberOfInstances(numberOfInstances);
         computeEnginePage.optionalPopUpClose();
 
-        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.OS,os);
+        computeEnginePage.selectDropdownValue(DropDownElement.DropDownName.OS,os);
         computeEnginePage.cookiesPopUpClose();
 
         computeEnginePage.getComputeEngineEntity().selectModelRadioButton();
-        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.MACHINE_TYPE,machineType);
+        computeEnginePage.selectDropdownValue(DropDownElement.DropDownName.MACHINE_TYPE,machineType);
 
-        computeEnginePage.getComputeEngineEntity().switchAddGPURadioButton();
-        computeEnginePage.selectDropdownValue(DropDownObject.DropDownName.GPU_MODEL,gpuModel);
+        computeEnginePage.enableRadioButton(RadioButtonElement.RadioButtonName.ADD_GPU);
+        computeEnginePage.selectDropdownValue(DropDownElement.DropDownName.GPU_MODEL,gpuModel);
         computeEnginePage.getComputeEngineEntity().setGpuNumber(gpuNumber);
 
         computeEnginePage.getComputeEngineEntity().selectCommittedTerm1Year();

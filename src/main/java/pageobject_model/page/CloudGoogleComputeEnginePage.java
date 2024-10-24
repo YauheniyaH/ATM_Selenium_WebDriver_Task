@@ -11,6 +11,8 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 import pageobject_model.model.ComputeEngineEntity;
+import pageobject_model.page.elements.DropDownElement;
+import pageobject_model.page.elements.RadioButtonElement;
 import pageobject_model.service.TestDataReader;
 
 import static java.lang.String.format;
@@ -69,11 +71,19 @@ public class CloudGoogleComputeEnginePage extends AbstractPage {
         return computeEngineEntity;
     }
 
-    public void selectDropdownValue(DropDownObject.DropDownName dropdownName, String value) {
-        DropDownObject dropdown = new DropDownObject(driver);
+    public void selectDropdownValue(DropDownElement.DropDownName dropdownName, String value) {
+        DropDownElement dropdown = new DropDownElement(driver);
         dropdown.expandDropdown(dropdownName);
         dropdown.selectItemByValue(value);
         logger.info(String.format("Input dropdown value for %s", dropdownName));
+    }
+
+    public void enableRadioButton (RadioButtonElement.RadioButtonName radioButtonName){
+        RadioButtonElement radioButton = new RadioButtonElement(driver);
+        if(!radioButton.checkRadioButtonEnabled(radioButtonName)){
+            radioButton.switchRadioButton(radioButtonName);
+            logger.debug("Add GPUs option was enabled");
+        }
     }
 
     public void optionalPopUpClose() {
@@ -91,7 +101,7 @@ public class CloudGoogleComputeEnginePage extends AbstractPage {
             cookiesAcceptButton.click();
             logger.info("Cookies pop-up was closed");
         } catch (Exception e) {
-            logger.debug("no cookies pop-up displayed");
+            logger.warn("no cookies pop-up displayed");
         }
     }
 
@@ -104,7 +114,7 @@ public class CloudGoogleComputeEnginePage extends AbstractPage {
         Actions actions = new Actions(driver);
         actions.moveToElement(instanceNameTextBox).click();
         actions.sendKeys(instanceNameTextBox, instanceName).sendKeys(Keys.ENTER).perform();
-        logger.debug("Instance name was updated");
+        logger.debug("Instance name was updated");// add value and locator to log
     }
 
     public String getTexBoxInstanceName() {

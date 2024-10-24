@@ -3,7 +3,7 @@
     <Appenders>
         <Console name="Console">
             <PatternLayout>
-                <Pattern>%d %p %c{2} [%t] %l %m%n</Pattern>
+                <Pattern>%d %p %c{2} [%t] %m%n</Pattern>
             </PatternLayout>
         </Console>
         <File name="File" fileName="target/logs/automation.log">
@@ -14,8 +14,8 @@
     </Appenders>
     <Loggers>
         <Root level="trace">
-            <AppenderRef ref="Console"/>
-            <AppenderRef ref="File"/>
+            <AppenderRef ref="Console" level="debug"/>
+            <AppenderRef ref="File" level="info"/>
         </Root>
     </Loggers>
 </Configuration>

@@ -1,11 +1,12 @@
-package pageobject_model.page;
+package pageobject_model.page.elements;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import pageobject_model.page.AbstractPage;
 
-public class DropDownObject extends AbstractPage {
+public class DropDownElement extends AbstractPage {
     private static final String PATH_DROPDOWN_TEMPLATE = "//span[contains(text(),%s)]/ancestor::li[1]";
 
     @FindBy(xpath = "//span[contains(text(),'Operating System / Software')]/ancestor::div[2]")
@@ -31,7 +32,7 @@ public class DropDownObject extends AbstractPage {
         }
     }
 
-    public DropDownObject(WebDriver driver) {
+    public DropDownElement(WebDriver driver) {
         super(driver);
     }
 
