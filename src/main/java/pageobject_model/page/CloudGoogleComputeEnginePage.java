@@ -61,10 +61,9 @@ public class CloudGoogleComputeEnginePage extends AbstractPage {
         computeEngineEntity = new ComputeEngineEntity(driver);
     }
 
-    public CloudGoogleComputeEnginePage openPage() {
+    public void openPage() {
         driver.get(TestDataReader.getTestData(COMPUTE_ENGINE_ULR));
         logger.info("ComputeEnginePage is open");
-        return this;
     }
 
     public ComputeEngineEntity getComputeEngineEntity() {

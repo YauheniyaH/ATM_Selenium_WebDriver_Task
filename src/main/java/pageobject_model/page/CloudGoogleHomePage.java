@@ -19,9 +19,9 @@ public class CloudGoogleHomePage extends AbstractPage {
         super(driver);
     }
 
-    public CloudGoogleHomePage openPage() {
+    public void openPage() {
         driver.get(TestDataReader.getTestData(HOMEPAGE_URL));
-        return this;
+
     }
 
     public CloudGoogleSearchResultsPage searchForTerms(String term) {

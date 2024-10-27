@@ -10,9 +10,8 @@ public class CloudGoogleSearchResultsPage extends AbstractPage{
     private WebElement generalSearchResults;
 
     @Override
-    protected AbstractPage openPage() {
+    protected void openPage() {
         //method is not need for Search result page
-        return null;
     }
 
     public CloudGoogleSearchResultsPage (WebDriver driver){

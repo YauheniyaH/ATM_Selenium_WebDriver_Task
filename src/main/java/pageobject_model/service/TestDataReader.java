@@ -9,6 +9,8 @@ public class TestDataReader {
 
     public static final String BROWSER = "browser";
 
+    public static final String WAIT_TIMEOUT_SECONDS= "wait.timeout.seconds";
+
     private static final ResourceBundle resourceBundle =ResourceBundle.getBundle(System.getProperty("environment"));
 
     public static String getTestData (String key){
