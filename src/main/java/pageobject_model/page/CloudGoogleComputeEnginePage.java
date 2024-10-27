@@ -1,5 +1,6 @@
 package pageobject_model.page;
 
+import org.apache.commons.exec.OS;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import org.openqa.selenium.*;
@@ -11,8 +12,7 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 import pageobject_model.model.ComputeEngineEntity;
-import pageobject_model.page.elements.DropDownElement;
-import pageobject_model.page.elements.RadioButtonElement;
+import pageobject_model.page.elements.*;
 import pageobject_model.service.TestDataReader;
 
 import static java.lang.String.format;
@@ -61,6 +61,22 @@ public class CloudGoogleComputeEnginePage extends AbstractPage {
         computeEngineEntity = new ComputeEngineEntity(driver);
     }
 
+    public enum DropDownName {
+        OS("OS"),
+        MACHINE_TYPE("machineType"),
+        GPU_MODEL("gpuModel");
+
+        private String name;
+
+        DropDownName(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
     public void openPage() {
         driver.get(TestDataReader.getTestData(COMPUTE_ENGINE_ULR));
         logger.info("ComputeEnginePage is open");
@@ -70,16 +86,33 @@ public class CloudGoogleComputeEnginePage extends AbstractPage {
         return computeEngineEntity;
     }
 
-    public void selectDropdownValue(DropDownElement.DropDownName dropdownName, String value) {
-        DropDownElement dropdown = new DropDownElement(driver);
-        dropdown.expandDropdown(dropdownName);
-        dropdown.selectItemByValue(value);
-        logger.info(String.format("Input dropdown value for %s", dropdownName));
+    public void selectDropdownValue(DropDownName dropdownName, String value) {
+        DefaultDropDown dropdown = this.getDropDown(dropdownName);
+        dropdown.expandDropdown();
+        dropdown.selectDropDownValue(value);
+        logger.info(String.format("Input dropdown value for %s with value %s", dropdownName, value));
     }
 
-    public void enableRadioButton (RadioButtonElement.RadioButtonName radioButtonName){
+    public DefaultDropDown getDropDown(DropDownName dropdownName) {
+        switch (dropdownName) {
+            case OS -> {
+                return new OSDropDown(driver);
+            }
+            case MACHINE_TYPE ->{
+                return new MachineTypeDropdown(driver);
+            }
+            case GPU_MODEL ->{
+                return new GPUModelDropDown(driver);
+            }
+            default -> {
+                return null;
+            }
+        }
+    }
+
+    public void enableRadioButton(RadioButtonElement.RadioButtonName radioButtonName) {
         RadioButtonElement radioButton = new RadioButtonElement(driver);
-        if(!radioButton.checkRadioButtonEnabled(radioButtonName)){
+        if (!radioButton.checkRadioButtonEnabled(radioButtonName)) {
             radioButton.switchRadioButton(radioButtonName);
             logger.debug("Add GPUs option was enabled");
         }
