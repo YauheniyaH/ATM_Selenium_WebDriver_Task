@@ -21,6 +21,7 @@ public class WebDriverCloudGoogleTest extends CommonConditions {
         computeEnginePage.openPage();
     }
 //test update for check Jenkins trigger
+    //update #2 for check Jenkins trigger
     @Test(description = "Monthly rate for input parameters has correct value",
             dataProvider = "computeEngineTestValues",
             dataProviderClass = pageobject_model.service.TestDataProvider.class )
