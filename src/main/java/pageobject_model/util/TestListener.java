@@ -10,6 +10,7 @@ import org.testng.ITestListener;
 import org.testng.ITestResult;
 import pageobject_model.driver.DriverSingleton;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -19,13 +20,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
 
-public class TestListener implements ITestListener   {
+public class TestListener implements ITestListener {
 
     private final Logger log = LogManager.getRootLogger();
     private static final Logger LOGGER = LogManager.getLogger(TestListener.class);
 
+    @Override
     public void onTestStart(ITestResult iTestResult) {
-
+        try {
+            saveScreenshotToReportPortal("Screenshot of test start to RP", "DEBUG");
+        } catch (MalformedURLException | URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void onTestSuccess(ITestResult iTestResult) {
@@ -35,7 +41,8 @@ public class TestListener implements ITestListener   {
     @Override
     public void onTestFailure(ITestResult iTestResult) {
         try {
-            saveScreenshot();
+            saveScreenshotToFile();
+            saveScreenshotToReportPortal("Screenshot of failed test to RP", "INFO");
         } catch (MalformedURLException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -55,27 +62,27 @@ public class TestListener implements ITestListener   {
     public void onFinish(ITestResult iTestResult) {
     }
 
-    private void saveScreenshot() throws MalformedURLException, URISyntaxException {
+    private void saveScreenshotToReportPortal(String rpMessage, String logLevel) throws MalformedURLException, URISyntaxException {
+
         File screenshotCapture = ((TakesScreenshot) DriverSingleton
                 .getDriver())
                 .getScreenshotAs(OutputType.FILE);
-        try {
-            String screenshotFilePath = ".//src/test/test_output/screenshots/"
-                    + getCurrentTimeAsString()
-                    + ".png";
-            File screenshotFile = new File(screenshotFilePath);
-            FileUtils.copyFile(screenshotCapture, screenshotFile);
-            String rpMessage = "test message for Report Portal";
-            ReportPortal.emitLog(rpMessage, "DEBUG", Calendar.getInstance().getTime(), screenshotCapture);
+        ReportPortal.emitLog(rpMessage, logLevel, Calendar.getInstance().getTime(), screenshotCapture);
+        log.debug("Screenshot of failed test was created and saved");
+    }
 
-
+    private void saveScreenshotToFile() throws MalformedURLException, URISyntaxException {
+        File screenshotCapture = ((TakesScreenshot) DriverSingleton
+                .getDriver())
+                .getScreenshotAs(OutputType.FILE);
+        String filePath = ".//src/test/test_output/screenshots/"
+                + getCurrentTimeAsString()
+                + ".png";
+        try (Closeable closable = () -> FileUtils.copyFile(screenshotCapture, new File(filePath));) {
+            FileUtils.copyFile(screenshotCapture, new File(filePath));
             log.debug("Screenshot of failed test was created and saved");
-
-           // LOGGER.info("RP_MESSAGE#FILE#{}#{}", screenshotFile.getAbsolutePath(), "I'm logging content via temp file");
-
-
         } catch (IOException e) {
-            log.error("Failed to save screenshot: " + e.getLocalizedMessage());
+            log.error(String.format("Failed to save screenshot: %s", e.getLocalizedMessage()));
         }
     }
 
