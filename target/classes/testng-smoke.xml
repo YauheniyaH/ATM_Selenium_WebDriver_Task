@@ -3,7 +3,7 @@
 <suite name="Smoke" verbose="1" >
     <test name="Search test"   >
         <classes>
-            <class name="pageobject_model.test.NewWebDriverCloudGoogleTest" />
+            <class name="pageobject_model.test.WebDriverCloudGoogleTest" />
         </classes>
     </test>
 </suite>

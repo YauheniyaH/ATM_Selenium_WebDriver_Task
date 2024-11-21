@@ -1,13 +1,22 @@
 package pageobject_model.test;
 
+import com.epam.reportportal.service.ReportPortal;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+import pageobject_model.driver.DriverSingleton;
 import pageobject_model.page.CloudGoogleComputeEnginePage;
 import pageobject_model.page.elements.DropDownElement;
 import pageobject_model.page.elements.RadioButtonElement;
+import pageobject_model.util.TestListener;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.Calendar;
 
 import static org.junit.Assert.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
@@ -20,11 +29,7 @@ public class WebDriverCloudGoogleTest extends CommonConditions {
         computeEnginePage = new CloudGoogleComputeEnginePage(driver);
         computeEnginePage.openPage();
     }
-//test update for check Jenkins trigger
-    //update #2 for check Jenkins trigger
-//update #3 for check Jenkins trigger
-//update #4 for check Jenkins trigger
-//update #5 for check Jenkins trigger
+
     @Test(description = "Monthly rate for input parameters has correct value",
             dataProvider = "computeEngineTestValues",
             dataProviderClass = pageobject_model.service.TestDataProvider.class )
@@ -77,7 +82,7 @@ public class WebDriverCloudGoogleTest extends CommonConditions {
     public void numberOfCPUSliderCheck() throws IOException {
         computeEnginePage.moveNumberOfCPUScrollBar(50);
         computeEnginePage.highlightElement(driver, computeEnginePage.labelNumberOfGPUs);
-        AssertJUnit.assertEquals("16 vCPUs", computeEnginePage.labelNumberOfGPUs.getText());
+         AssertJUnit.assertEquals("16 vCPUs", computeEnginePage.labelNumberOfGPUs.getText());
     }
 
     @Test(description = "Instance name input check using Actions")
